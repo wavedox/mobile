@@ -1,0 +1,56 @@
+sup.world {
+	font-size: 8pt;
+	margin-left: 5px;
+}
+.details {
+	font-weight: normal;
+	text-align: right;
+}
+.ui-bar-b, .ui-page-theme-b .ui-bar-inherit, html .ui-bar-b .ui-bar-inherit, html .ui-body-b .ui-bar-inherit, html body .ui-group-theme-b .ui-bar-inherit, .ui-page-theme-b .ui-btn {
+	color: #BBB !important;
+}
+.ui-header {
+	background-color: #4e5d6c !important;
+	border-color: #2b3e50 !important;
+}
+
+.ui-page {
+	background-color: #2b3e50 !important;
+}
+.ui-btn-active {
+	background-color: #11253c !important;
+	border-color: #11253c !important;
+	text-shadow: 0 1px 0 #175090 !important;
+}
+.ui-grid-solo {
+	background-color: #11253c !important;
+}
+#charDetails .ui-collapsible-content {
+	padding: 0px;
+}
+#collapsible-first .ui-icon-minus:after {
+	background-image: none !important;
+	content: none;
+}
+#skillPoints {
+	float: right;
+}
+#charDetails  .ui-block-a {
+	width: 37%;
+}
+#charDetails  .ui-block-b {
+	width: 63%;
+}
+#paperDoll {
+	margin: 0 auto;
+	text-align: center;
+}
+#charGender {
+	text-transform: capitalize;
+}
+.logo {
+	margin: 5px;
+	width: 30px;
+	height: 30px;
+	float: left;
+}

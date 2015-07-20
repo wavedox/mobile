@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Wavedox</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css" />
+		<link rel="stylesheet" href="css/custom.css" />
+		<script src="phonegap.js"></script>
+		<script src="cordova.js"></script>
+		<script src="jquery/jquery.js"></script>
+		<script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+		<script src="js/charSearch.js"></script>
+		<script src="js/leagueSearch.js"></script>
+		<script src="js/charDetails.js"></script>
+		<script src="js/utils.js"></script>
+		<!-- google analytics -->
+		<script type="text/javascript">
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','js/analytics.js','ga');
+		</script>
+
+		<script type="text/javascript">
+			var ua = 'UA-64785625-3';
+			var analytics = window.analytics;
+			$( document ).bind( 'mobileinit', function(){
+				$.mobile.loader.prototype.options.text = "loading";
+				$.mobile.loader.prototype.options.textVisible = false;
+				$.mobile.loader.prototype.options.theme = "a";
+				$.mobile.loader.prototype.options.html = "";
+			});
+			function onReady(){
+			     ga('create', ua, {'storage': 'none','clientId': device.uuid});
+			    //ga('create', ua, {'storage': 'none','clientId': 'device.uuid'});
+				ga('set','checkProtocolTask',null);
+				ga('set','checkStorageTask',null);
+				ga('send', 'pageview', {'page': '/menu'});     
+			}
+			function onLoad(){
+				document.addEventListener("deviceready",onReady,false);
+			}
+		</script>
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,600">
+	</head>
+	    
+	<body onload="onLoad()">
+		<input type="hidden" id="charID" />
+		<input type="hidden" id="leagueID" />
+		<div data-role="page" id="menu" data-theme="b">
+
+			<div data-role="header" data-position="fixed">
+				<img src="img/logo.png" class="logo"  /><h1>Wavedox</h1>
+			</div><!-- /header -->
+
+			<div data-role="content">
+				<a href="#charSearch" data-role="button" data-icon="arrow-r" data-theme="c" data-iconpos="right" data-transition="slide" onclick="ga('send','pageview','/charSearch');" >Character Search</a>
+				<a href="#leagueSearch" data-role="button" data-icon="arrow-r" data-theme="c" data-iconpos="right" data-transition="slide" onclick="ga('send','pageview','/leagueSearch');" >League Search</a>
+			</div><!-- /content -->
+		</div><!-- /page -->
+		
+		
+		<div data-role="page" id="charSearch" data-theme="b">
+			<div data-role="header">
+				<img src="img/logo.png" class="logo"  /><h1>Character Search</h1>
+			</div><!-- /header -->
+			<div data-role="content">
+				<fieldset data-role="controlgroup" data-type="horizontal" align="center">
+					<input type="radio" name="radio-choice-h-2" id="radio-choice-h-2a" value="1" checked="checked" onclick="clearCharSearch()">
+					<label for="radio-choice-h-2a">USPC</label>
+					<input type="radio" name="radio-choice-h-2" id="radio-choice-h-2b" value="2" onclick="clearCharSearch()" >
+					<label for="radio-choice-h-2b">USPS</label>
+					<input type="radio" name="radio-choice-h-2" id="radio-choice-h-2c" value="3" onclick="clearCharSearch()">
+					<label for="radio-choice-h-2c">EUPC</label>
+					<input type="radio" name="radio-choice-h-2" id="radio-choice-h-2d" value="4" onclick="clearCharSearch()">
+					<label for="radio-choice-h-2d">EUPS</label>
+				</fieldset>
+				<ul id="autocompleteChar" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Find a character..." data-filter-theme="a"></ul>
+				
+			</div><!-- /content -->
+		</div><!-- /page -->
+		
+		<div data-role="page" id="charDetails" data-theme="b">
+			<div data-role="header">
+				<img src="img/logo.png" class="logo"  /><h1>Char Details</h1>
+			</div><!-- /header -->
+			<div data-role="content">
+				
+				<div data-role="collapsible" id="collapsible-first" data-collapsed="false" data-iconpos="right">
+					<h4 class="ui-bar-top"><span id="charName">&nbsp;</span></h4>
+					<div class="ui-grid-a" data-theme="b">
+						<div class="ui-block-a"><div class="ui-bar ui-bar-a" >League</div></div>
+						<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charLeague">&nbsp;</div></div>
+						<div class="ui-block-a"><div class="ui-bar ui-bar-a">Power</div></div>
+						<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charPower">&nbsp;</div></div>
+						<div class="ui-block-a"><div class="ui-bar ui-bar-a">PVE</div></div>
+						<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charPve">&nbsp;</div></div>
+						<div class="ui-block-a"><div class="ui-bar ui-bar-a">PVP</div></div>
+						<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charPvp">&nbsp;</div></div>
+					</div>
+				</div>
+				<div data-role="collapsible-set" data-theme="c">
+					<div data-role="collapsible" data-collapsed="false">
+						<h4 class="ui-bar-top">Stats <span id="skillPoints">&nbsp;</span></h4>
+						<div class="ui-grid-a">
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Health</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charHealthStat">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Power</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charPowerStat">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Defence</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charDefenceStat">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Dominance</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charDominanceStat">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Might</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charMightStat">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Precision</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charPrecisionStat">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Restoration</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charRestorationStat">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Toughness</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charToughnessStat">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Vitalization</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charVitalizationStat">&nbsp;</div></div>
+							
+						</div>
+					</div>
+					<div data-role="collapsible" id="paperDollCollapsible">
+						<h4>Picture</h4>
+						<div class="ui-grid-solo" id="paperDoll">&nbsp;</div>
+					</div>
+					<div data-role="collapsible" id="detailsCollapsible">
+	    				<h4>Details</h4>
+	    				<div class="ui-grid-a">
+	    					<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Level</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charLevel">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Feats</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charFeats">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Skill Points</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charSkillPoints">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">World</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charWorld">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Gender</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charGender">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a">Faction</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charFaction">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a">Origin</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charOrigin">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Mentor</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charMentor">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Movement</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charMovement">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Weapon</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charWeapon">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Personality</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charPersonality">&nbsp;</div></div>
+							<div class="ui-block-a"><div class="ui-bar ui-bar-a ">Location</div></div>
+							<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="charLocation">&nbsp;</div></div>
+						</div>
+					</div>
+				</div>
+			</div><!-- /content -->
+		</div><!-- /page -->
+		
+		<div data-role="page" id="leagueSearch" data-theme="b">
+			<div data-role="header">
+				<img src="img/logo.png" class="logo"  /><h1>League Search</h1>
+			</div><!-- /header -->
+			<div data-role="content">
+				<fieldset data-role="controlgroup" data-type="horizontal" align="center">
+					<input type="radio" name="radio-choice-league-h-2" id="radio-choice-league-h-2a" value="1" checked="checked" onclick="clearLeagueSearch()">
+					<label for="radio-choice-league-h-2a">USPC</label>
+					<input type="radio" name="radio-choice-league-h-2" id="radio-choice-league-h-2b" value="2" onclick="clearLeagueSearch()" >
+					<label for="radio-choice-league-h-2b">USPS</label>
+					<input type="radio" name="radio-choice-league-h-2" id="radio-choice-league-h-2c" value="3" onclick="clearLeagueSearch()">
+					<label for="radio-choice-league-h-2c">EUPC</label>
+					<input type="radio" name="radio-choice-league-h-2" id="radio-choice-league-h-2d" value="4" onclick="clearLeagueSearch()">
+					<label for="radio-choice-league-h-2d">EUPS</label>
+				</fieldset>
+				<ul id="autocompleteLeague" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Find a League..." data-filter-theme="a"></ul>
+				
+			</div><!-- /content -->
+		</div><!-- /page -->
+		
+		<div data-role="page" id="leagueDetails" data-theme="b">
+			<div data-role="header">
+				<img src="img/logo.png" class="logo"  /><h1>League Details</h1>
+			</div><!-- /header -->
+			<div data-role="content">
+				<div data-role="collapsible" id="collapsible-first" data-collapsed="false" data-iconpos="right">
+					<h4 class="ui-bar-top"><span id="leagueName">&nbsp;</span></h4>
+					<div class="ui-grid-a" data-theme="b">
+						<div class="ui-block-a"><div class="ui-bar ui-bar-a ">World</div></div>
+						<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="leagueWorld">&nbsp;</div></div>
+						<div class="ui-block-a"><div class="ui-bar ui-bar-a">Faction</div></div>
+						<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="leagueFaction">&nbsp;</div></div>
+						<div class="ui-block-a"><div class="ui-bar ui-bar-a">Members</div></div>
+						<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="leagueMemberCount">&nbsp;</div></div>
+						<div class="ui-block-a"><div class="ui-bar ui-bar-a">Avg PVE CR</div></div>
+						<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="leagueAvgPve">&nbsp;</div></div>
+						<div class="ui-block-a"><div class="ui-bar ui-bar-a">Avg PVP CR</div></div>
+						<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="leagueAvgPvp">&nbsp;</div></div>
+						<div class="ui-block-a"><div class="ui-bar ui-bar-a">Avg SP</div></div>
+						<div class="ui-block-b"><div class="ui-bar ui-bar-a details" id="leagueAvgSp">&nbsp;</div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>
